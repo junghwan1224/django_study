@@ -1,0 +1,8 @@
+<div>
+  <form action='' method='POST'>
+    {% csrf_token %}
+    {{ userForm.as_p }}
+    {{ accountForm.as_p }}
+    <button type='submit'>sign up</button>
+  </form>
+</div>

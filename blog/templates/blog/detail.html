@@ -1,0 +1,18 @@
+{% extends 'blog/base.html' %}
+
+{% block content %}
+
+<div id='titleDiv'>Title : {{ article.title }}</div>
+
+<hr/>
+
+<div id='contentDiv'>
+</div>
+
+<script>
+    var a = '{{ article.content }}';
+    console.log(a);
+    document.getElementById('contentDiv').innerHTML = a.replace(/&lt;/gi, '<').replace(/&gt;/gi, '>').replace(/&quot;/gi, '"');
+</script>
+
+{% endblock %}

@@ -1,0 +1,23 @@
+{% load socialaccount %}
+
+<!--
+<div>
+  <a href="{% provider_login_url 'kakao' %}"><button>kakao login</button></a>
+</div>
+-->
+
+{% for provider in providers %}
+        {% if provider.social_app %}
+        <div>
+            <a id="{{ provider.name }}" class="btn btn-primary btn-md mb-3" role="button" href="{% provider_login_url provider.id next='/' %}" >
+                {% if provider.name == 'Kakao' %}
+                  <i class="fas fa-comment mr-3"></i>카카오계정으로 로그인
+                {% endif %}
+            </a>
+        </div>
+        {% else %}
+            <a>
+                Provider {{ provider.name }} 설정이 필요합니다.
+            </a>
+        {% endif %}
+{% endfor %}
