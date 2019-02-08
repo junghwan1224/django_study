@@ -43,16 +43,29 @@ class Post(models.Model):
         ('Sell', '판매글'),
     )
 
-    post_type = models.CharField(max_length=10, choices=POST_TYPE, default='Buy')
+    post_type = models.CharField(
+            max_length=10,
+            choices=POST_TYPE,
+            default='Buy',
+        )
+    sub_theme = models.ForeignKey(
+            SubTheme,
+            on_delete=models.CASCADE,
+            related_name='post_sub_theme',
+            default=1,
+        )
     author = models.ForeignKey(Account, on_delete=models.CASCADE)
     title = models.CharField(max_length=30)
-    content = models.TextField()
     price = models.PositiveIntegerField()
+    content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
         ordering = ['-created_at']
+
+    def __str__(self):
+        return '{0} - {1}'.format(self.get_post_type_display(), self.title)
 
 
 # class Tag(models.Model):

@@ -2,6 +2,9 @@ from django.shortcuts import render, reverse, redirect
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import login_required
 
+from django.views.generic.list import ListView
+from django.views.generic.detail import DetailView
+
 from .models import MainTheme
 from .models import Post
 from accounts.models import Account
@@ -21,14 +24,37 @@ def category_list(request):
 
 def buy_post_list(request):
     post = Post.objects.filter(post_type='Buy')
+    return render(request, 'buy_post_list.html', {'posts': post})
 
 
 def sell_post_list(request):
     post = Post.objects.filter(post_type='Sell')
+    return render(request, 'buy_post_list.html', {'posts': post})
+
+
+class BuyList(ListView):
+    model = Post
+    template_name = 'post_list.html'
+    context_object_name = 'posts'
+    paginate_by = 10
+
+    def get_queryset(self):
+        return Post.objects.filter(post_type='Buy')
+
+
+class SellList(ListView):
+    model = Post
+    template_name = 'post_list.html'
+    context_object_name = 'posts'
+    paginate_by = 10
+
+    def get_queryset(self):
+        return Post.objects.filter(post_type='Sell')
 
 
 def post_detail(request, pk):
-    pass
+    post = get_object_or_404(Post, pk=pk)
+    return render(request, 'post_detail.html', {'post': post})
 
 
 @login_required
