@@ -10,6 +10,8 @@ from django.contrib.auth.hashers import make_password
 from .forms import AccountForm
 from .forms import UserForm
 from .forms import LoginForm
+from .forms import SignUpForm
+from .forms import SignInForm
 # Create your views here.
 
 
@@ -30,27 +32,20 @@ def indexView(request):
 
 def signupView(request):
 
+    signupForm = SignUpForm(request.POST or None)
+
     if request.method == 'POST':
-        userForm = UserForm(request.POST)
-        accountForm = AccountForm(request.POST)
+        if signupForm.is_valid():
 
-        if userForm.is_valid() and accountForm.is_valid():
-            userFormSave = userForm.save(commit=False)
-            userFormSave.password = make_password(userFormSave.password)
-            userFormSave.save()
-
-            account = accountForm.save(commit=False)
-            account.user = userFormSave
-            account.save()
+            signupForm.save()
 
             return redirect('accounts:loginView')
 
-    userForm = UserForm()
-    accountForm = AccountForm()
+    # userForm = UserForm()
+    # accountForm = AccountForm()
 
     ctx = {
-        'accountForm': accountForm,
-        'userForm': userForm,
+        'signupForm': signupForm,
     }
 
     return render(request, 'account/signup_template.html', ctx)
@@ -58,21 +53,26 @@ def signupView(request):
 
 def loginView(request):
 
+    # loginForm = SignInForm(request, request.POST or None)
+
     # if request.method == 'POST' and LoginForm(request.POST).is_valid():
     if request.method == 'POST':
-        username = request.POST['username']
-        password = request.POST['password']
-        user = authenticate(username=username, password=password)
-        print(username, password)
-        print(user)
+        loginForm = SignInForm(request=request, data=request.POST)
+        if loginForm.is_valid():
 
-        if user is not None:
+            user = loginForm.get_user()
+            print(user)
+
             login(request, user)
             return redirect(settings.LOGIN_REDIRECT_URL)
-        else:
-            raise Http404('login failed')
 
-    loginForm = LoginForm()
+            # if user is not None:
+            #     login(request, user)
+            #     return redirect(settings.LOGIN_REDIRECT_URL)
+            # else:
+            #     raise Http404('login failed')
+
+    loginForm = SignInForm()
     return render(request, 'account/login_template.html', {'loginForm': loginForm})
 
 
