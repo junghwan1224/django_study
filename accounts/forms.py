@@ -9,6 +9,7 @@ class SignUpForm(UserCreationForm):
 
     email = forms.EmailField()
     address = forms.CharField(max_length=30)
+    phone = forms.CharField(max_length=15)
 
     def clean_email(self):
         email = self.cleaned_data.get('email')
@@ -21,6 +22,12 @@ class SignUpForm(UserCreationForm):
         if address is None:
             raise forms.ValidationError('Please write your address')
         return address
+
+    def clean_phone(self):
+        phone = self.cleaned_data.get('phone')
+        if phone is None:
+            raise forms.ValidationError('Please write your phone number')
+        return phone
 
     def save(self, commit=True):
         user = super().save(commit=False)

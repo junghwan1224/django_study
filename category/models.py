@@ -38,6 +38,13 @@ class SubTheme(models.Model):
 
 class Post(models.Model):
 
+    POST_TYPE = (
+        ('Buy', '구매글'),
+        ('Sell', '판매글'),
+    )
+
+    post_type = models.CharField(max_length=10, choices=POST_TYPE, default='Buy')
+    author = models.ForeignKey(Account, on_delete=models.CASCADE)
     title = models.CharField(max_length=30)
     content = models.TextField()
     price = models.PositiveIntegerField()
@@ -45,28 +52,30 @@ class Post(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
-        abstract = True
         ordering = ['-created_at']
 
+
+# class Tag(models.Model):
+#     name = models.CharField(max_length=10)
 
 # 판매중, 구매중, 거래중 로직 어떤식으로 짤지 구체적으로 정해야 할 것 같습니다...!
 
 
-class SellPost(Post):
+# class SellPost(Post):
 
-    author = models.ForeignKey(Account, on_delete=models.CASCADE)
-    sub_theme = models.ForeignKey(
-            SubTheme,
-            on_delete=models.CASCADE,
-            related_name='sell_post_sub_theme'
-        )
+#     author = models.ForeignKey(Account, on_delete=models.CASCADE)
+#     sub_theme = models.ForeignKey(
+#             SubTheme,
+#             on_delete=models.CASCADE,
+#             related_name='sell_post_sub_theme'
+#         )
 
 
-class PurchasePost(Post):
+# class PurchasePost(Post):
 
-    author = models.ForeignKey(Account, on_delete=models.CASCADE)
-    sub_theme = models.ForeignKey(
-            SubTheme,
-            on_delete=models.CASCADE,
-            related_name='purchase_post_sub_theme'
-        )
+#     author = models.ForeignKey(Account, on_delete=models.CASCADE)
+#     sub_theme = models.ForeignKey(
+#             SubTheme,
+#             on_delete=models.CASCADE,
+#             related_name='purchase_post_sub_theme'
+#         )

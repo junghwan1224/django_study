@@ -1,7 +1,11 @@
-from django.shortcuts import render
+from django.shortcuts import render, reverse, redirect
 from django.shortcuts import get_object_or_404
+from django.contrib.auth.decorators import login_required
 
-from .models import MainTheme, SellPost, PurchasePost
+from .models import MainTheme
+from .models import Post
+from accounts.models import Account
+from .forms import PostForm
 # Create your views here.
 
 
@@ -15,11 +19,31 @@ def category_list(request):
     return render(request, 'c_list.html', ctx)
 
 
-def sell_post(request, pk):
-    sell = get_object_or_404(SellPost, pk=pk)
-    return render(request, 'sell_post.html', {'sell_post': sell})
+def buy_post_list(request):
+    post = Post.objects.filter(post_type='Buy')
 
 
-def purchase_post(request, pk):
-    purchase = get_object_or_404(PurchasePost, pk=pk)
-    return render(request, 'purchase_post.html', {'purchase_post': purchase})
+def sell_post_list(request):
+    post = Post.objects.filter(post_type='Sell')
+
+
+def post_detail(request, pk):
+    pass
+
+
+@login_required
+def post_create(request):
+    if request.method == 'POST':
+        form = PostForm(request.POST)
+        if form.is_valid():
+            account = Account.objects.get(user_id=request.user.pk)
+            saveForm = form.save(commit=False)
+            saveForm.author = account
+            saveForm.save()
+            return redirect(reverse('blog:post_list_view'))
+
+    form = PostForm()
+    ctx = {
+        'form': form
+    }
+    return render(request, 'post_create.html', ctx)

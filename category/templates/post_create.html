@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>summernote test</title>
+</head>
+
+<body>
+    <form action="" method="post">
+        {% csrf_token %}
+        {{ form|safe }}
+        <button type="submit">Post</button>
+    </form>
+</body>
+</html>

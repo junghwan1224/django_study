@@ -7,6 +7,7 @@ from django.contrib.auth import login, logout, authenticate
 from django.http import Http404
 from django.contrib.auth.hashers import make_password
 
+from .models import Account
 from .forms import AccountForm
 from .forms import UserForm
 from .forms import LoginForm
@@ -37,7 +38,16 @@ def signupView(request):
     if request.method == 'POST':
         if signupForm.is_valid():
 
-            signupForm.save()
+            form = signupForm.save()
+
+            address = request.POST.get('address')
+            phone = request.POST.get('phone')
+
+            Account.objects.create(
+                user_id=form.id,
+                address=address,
+                phone=phone
+                )
 
             return redirect('accounts:loginView')
 

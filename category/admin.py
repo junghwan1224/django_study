@@ -1,6 +1,10 @@
 from django.contrib import admin
-from .models import SellPost, PurchasePost
+from .models import Post
+from django_summernote.admin import SummernoteModelAdmin
 # Register your models here.
 
-admin.site.register(SellPost)
-admin.site.register(PurchasePost)
+
+# class SummerAdmin(SummernoteModelAdmin):
+#     summernote_fields = ('content',)
+
+admin.site.register(Post, SummernoteModelAdmin)
