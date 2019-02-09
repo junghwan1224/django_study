@@ -3,10 +3,8 @@ from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import login_required
 
 from django.views.generic.list import ListView
-from django.views.generic.detail import DetailView
 
 from .models import MainTheme
-from .models import SubTheme
 from .models import Post
 from accounts.models import Account
 from .forms import PostForm
@@ -21,16 +19,6 @@ def category_list(request):
         'mainTheme': main,
     }
     return render(request, 'c_list.html', ctx)
-
-
-def buy_post_list(request):
-    post = Post.objects.filter(post_type='Buy')
-    return render(request, 'buy_post_list.html', {'posts': post})
-
-
-def sell_post_list(request):
-    post = Post.objects.filter(post_type='Sell')
-    return render(request, 'buy_post_list.html', {'posts': post})
 
 
 class AllList(ListView):
