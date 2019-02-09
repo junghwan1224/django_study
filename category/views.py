@@ -69,7 +69,10 @@ def post_create(request):
             saveForm = form.save(commit=False)
             saveForm.author = account
             saveForm.save()
-            return redirect(reverse('blog:post_list_view'))
+            return redirect(reverse(
+                    'category:all_list',
+                    kwargs={'theme_pk': saveForm.sub_theme.pk}
+                ))
 
     form = PostForm()
     ctx = {

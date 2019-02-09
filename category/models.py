@@ -36,6 +36,7 @@ class SubTheme(models.Model):
         return self.title
 
 
+# 거래상태 필드는 아직
 class Post(models.Model):
 
     POST_TYPE = (
