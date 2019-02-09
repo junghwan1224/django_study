@@ -1,30 +1,16 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>category test</title>
-    </head>
-    <body>
-        {{ mainTheme }}
-        <div>
-            <ul>
-                {% for theme in mainTheme.related_mid_theme.all %}
-                    <li>{{ theme.title }}</li>
-                        <ul>
-                            {% for sub_theme in theme.related_sub_theme.all %}
-                                <li>{{ sub_theme.title }}</li>
-                                <ul>
-                                    {% for sell_post in sub_theme.sell_post_sub_theme.all %}
-                                        <a href="{% url 'category:sell_post' sell_post.pk %}"><li>{{ sell_post.title }}(Sell)</li></a>
-                                    {% endfor %}
-
-                                    {% for purchase_post in sub_theme.purchase_post_sub_theme.all %}
-                                        <a href="{% url 'category:purchase_post' purchase_post.pk %}"><li>{{ purchase_post.title }}(Purchase)</li></a>
-                                    {% endfor %}
-                                </ul>
-                            {% endfor %}
-                        </ul>
-                {% endfor %}
-            </ul>
-        </div>
-    </body>
-</html>
+{% extends 'blog/base.html' %}
+{% block content %}
+    {{ mainTheme }}
+    <div>
+        <ul>
+            {% for theme in mainTheme.related_mid_theme.all %}
+                <li>{{ theme.title }}</li>
+                    <ul>
+                        {% for sub_theme in theme.related_sub_theme.all %}
+                            <a href="{% url 'category:all_list' sub_theme.pk %}"><li>{{ sub_theme.title }}</li></a>
+                        {% endfor %}
+                    </ul>
+            {% endfor %}
+        </ul>
+    </div>
+{% endblock %}

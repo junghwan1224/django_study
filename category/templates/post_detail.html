@@ -5,10 +5,11 @@
 <div id='titleDiv'>Title : {{ post.title }}</div>
 
 <hr/>
-<div id='authorDiv'>{{ post.author }}</div>
-<div id='postTypeDiv'>{{ post.post_type }}</div>
-<div id='priceDiv'>{{ post.price }}</div>
-<div id='dateDiv'>{{ post.created_at|date:'Y.n.d  a h:i' }}</div>
+<div id='authorDiv'>author: {{ post.author }}</div>
+<div id='postTypeDiv'>post type: {{ post.post_type }}</div>
+<div id='subThemeDiv'>theme: {{ post.sub_theme.title }}</div>
+<div id='priceDiv'>price: {{ post.price }}won</div>
+<div id='dateDiv'>date: {{ post.created_at|date:'Y.n.d  a h:i' }}</div>
 <hr/>
 
 <div id='contentDiv'>

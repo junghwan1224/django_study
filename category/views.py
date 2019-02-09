@@ -6,6 +6,7 @@ from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 
 from .models import MainTheme
+from .models import SubTheme
 from .models import Post
 from accounts.models import Account
 from .forms import PostForm
@@ -38,6 +39,10 @@ class AllList(ListView):
     context_object_name = 'posts'
     paginate_by = 10
 
+    def get_queryset(self):
+        theme_pk = self.kwargs['theme_pk']
+        return Post.objects.filter(sub_theme__pk=theme_pk)
+
 
 class BuyList(ListView):
     model = Post
@@ -46,7 +51,8 @@ class BuyList(ListView):
     paginate_by = 10
 
     def get_queryset(self):
-        return Post.objects.filter(post_type='Buy')
+        theme_pk = self.kwargs['theme_pk']
+        return Post.objects.filter(sub_theme__pk=theme_pk).filter(post_type='Buy')
 
 
 class SellList(ListView):
@@ -56,7 +62,8 @@ class SellList(ListView):
     paginate_by = 10
 
     def get_queryset(self):
-        return Post.objects.filter(post_type='Sell')
+        theme_pk = self.kwargs['theme_pk']
+        return Post.objects.filter(sub_theme__pk=theme_pk).filter(post_type='Sell')
 
 
 @login_required
