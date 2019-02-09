@@ -32,6 +32,13 @@ def sell_post_list(request):
     return render(request, 'buy_post_list.html', {'posts': post})
 
 
+class AllList(ListView):
+    model = Post
+    template_name = 'post_list.html'
+    context_object_name = 'posts'
+    paginate_by = 10
+
+
 class BuyList(ListView):
     model = Post
     template_name = 'post_list.html'
@@ -52,6 +59,7 @@ class SellList(ListView):
         return Post.objects.filter(post_type='Sell')
 
 
+@login_required
 def post_detail(request, pk):
     post = get_object_or_404(Post, pk=pk)
     return render(request, 'post_detail.html', {'post': post})

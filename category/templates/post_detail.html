@@ -1,0 +1,23 @@
+{% extends 'blog/base.html' %}
+
+{% block content %}
+
+<div id='titleDiv'>Title : {{ post.title }}</div>
+
+<hr/>
+<div id='authorDiv'>{{ post.author }}</div>
+<div id='postTypeDiv'>{{ post.post_type }}</div>
+<div id='priceDiv'>{{ post.price }}</div>
+<div id='dateDiv'>{{ post.created_at|date:'Y.n.d  a h:i' }}</div>
+<hr/>
+
+<div id='contentDiv'>
+</div>
+
+<script>
+    var a = '{{ post.content }}';
+    console.log(a);
+    document.getElementById('contentDiv').innerHTML = a.replace(/&lt;/gi, '<').replace(/&gt;/gi, '>').replace(/&quot;/gi, '"');
+</script>
+
+{% endblock %}
