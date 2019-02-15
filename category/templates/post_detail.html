@@ -4,6 +4,12 @@
 
 <div id='titleDiv'>Title : {{ post.title }}</div>
 
+{% if post.apply_user.count %}
+  <div>{{ post.get_post_status_display }}({{ post.apply_user.count }})</div>
+{% else %}
+  <div>{{ post.get_post_status_display }}</div>
+{% endif %}
+
 <hr/>
 <div id='authorDiv'>author: {{ post.author }}</div>
 <div id='postTypeDiv'>post type: {{ post.post_type }}</div>
@@ -21,7 +27,34 @@
     document.getElementById('contentDiv').innerHTML = a.replace(/&lt;/gi, '<').replace(/&gt;/gi, '>').replace(/&quot;/gi, '"');
 </script>
 
-<div id='applyDiv'><button>거래 신청</button></div>
+<div id='applyDiv'>
+  <form action="{% url 'category:apply_post' post.pk %}" method='POST'>
+    {% csrf_token %}
+    <button type='submit'>거래 신청</button>
+  </form>
+</div>
+<hr/>
 
-<div id='commentDiv'></div>
+<div id='commentFormDiv'>
+  <form action='' method='POST'>
+    {% csrf_token %}
+    {{ commentForm.as_p }}
+    <button type='submit'>댓글작성</button>
+  </form>
+</div>
+
+<div id='commentsDiv'>
+  {% if post.related_comment.count %}
+    {% for comment in post.related_comment.all %}
+      <div>
+        <div style='display: inline-block;'>{{ comment.author }}</div> |
+        <div style='display: inline-block;'>{{ comment.created_at|date:'Y.n.d  a h:i' }}</div>
+        <div>{{ comment.content }}</div>
+      </div>
+      <hr/>
+    {% endfor %}
+  {% else %}
+   <div>No comment</div>
+  {% endif %}
+</div>
 {% endblock %}

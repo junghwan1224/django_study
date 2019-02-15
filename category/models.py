@@ -45,11 +45,23 @@ class Post(models.Model):
         ('Sell', '판매글'),
     )
 
+    POST_STATUS = (
+            ('Deal', '거래중'),
+            ('End', '거래완료'),
+        )
+
     post_type = models.CharField(
             max_length=10,
             choices=POST_TYPE,
             default='Buy',
         )
+
+    post_status = models.CharField(
+            max_length=10,
+            choices=POST_STATUS,
+            default='Deal',
+        )
+
     sub_theme = models.ForeignKey(
             SubTheme,
             on_delete=models.CASCADE,
@@ -60,11 +72,10 @@ class Post(models.Model):
     title = models.CharField(max_length=30)
     price = models.PositiveIntegerField()
     content = models.TextField()
-    apply_user = models.ForeignKey(
+    apply_user = models.ManyToManyField(
             User,
-            on_delete=models.SET_NULL,
-            null=True,
-            related_name='apply_user',
+            related_name='applied_post',
+            blank=True,
         )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

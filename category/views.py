@@ -8,6 +8,7 @@ from .models import MainTheme
 from .models import Post
 from accounts.models import Account
 from .forms import PostForm
+from .forms import CommentForm
 # Create your views here.
 
 
@@ -56,8 +57,26 @@ class SellList(ListView):
 
 @login_required
 def post_detail(request, pk):
+    form = CommentForm(request.POST or None)
     post = get_object_or_404(Post, pk=pk)
-    return render(request, 'post_detail.html', {'post': post})
+
+    if request.method == 'POST':
+        if form.is_valid():
+            saveForm = form.save(commit=False)
+            saveForm.author = request.user
+            saveForm.post = post
+            saveForm.save()
+
+            return redirect(reverse(
+                    'category:post_detail',
+                    kwargs={'pk': pk}
+                ))
+
+    ctx = {
+        'post': post,
+        'commentForm': form,
+    }
+    return render(request, 'post_detail.html', ctx)
 
 
 # 여기에도 pk 파라미터를 줘야 하는가?
@@ -80,3 +99,21 @@ def post_create(request, pk):
         'form': form
     }
     return render(request, 'post_create.html', ctx)
+
+
+@login_required
+def apply_post(request, pk):
+    if request.method == 'POST':
+        post = get_object_or_404(Post, pk=pk)
+        if post.apply_user.filter(pk=request.user.pk).exists():
+            print('이미 신청')
+            return redirect(reverse(
+                    'category:post_detail',
+                    kwargs={'pk': pk}
+                ))
+        else:
+            post.apply_user.add(request.user)
+            return redirect(reverse(
+                    'category:post_detail',
+                    kwargs={'pk': pk}
+                ))
