@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 from accounts.models import Account
 # Create your models here.
 
@@ -36,7 +37,7 @@ class SubTheme(models.Model):
         return self.title
 
 
-# 거래상태 필드는 아직
+# 거래상태 필드는 아직, 남녀 카테고리(gender), 섬네일 이미지
 class Post(models.Model):
 
     POST_TYPE = (
@@ -59,6 +60,12 @@ class Post(models.Model):
     title = models.CharField(max_length=30)
     price = models.PositiveIntegerField()
     content = models.TextField()
+    apply_user = models.ForeignKey(
+            User,
+            on_delete=models.SET_NULL,
+            null=True,
+            related_name='apply_user',
+        )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -69,8 +76,16 @@ class Post(models.Model):
         return '{0} - {1}'.format(self.get_post_type_display(), self.title)
 
 
-# class Tag(models.Model):
-#     name = models.CharField(max_length=10)
+class Comment(models.Model):
+
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    content = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    post = models.ForeignKey(
+            Post,
+            on_delete=models.CASCADE,
+            related_name='related_comment'
+        )
 
 # 판매중, 구매중, 거래중 로직 어떤식으로 짤지 구체적으로 정해야 할 것 같습니다...!
 

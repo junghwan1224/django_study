@@ -60,8 +60,9 @@ def post_detail(request, pk):
     return render(request, 'post_detail.html', {'post': post})
 
 
+# 여기에도 pk 파라미터를 줘야 하는가?
 @login_required
-def post_create(request):
+def post_create(request, pk):
     if request.method == 'POST':
         form = PostForm(request.POST)
         if form.is_valid():
@@ -71,10 +72,10 @@ def post_create(request):
             saveForm.save()
             return redirect(reverse(
                     'category:all_list',
-                    kwargs={'theme_pk': saveForm.sub_theme.pk}
+                    kwargs={'theme_pk': pk}
                 ))
 
-    form = PostForm()
+    form = PostForm(initial={'sub_theme': pk})
     ctx = {
         'form': form
     }

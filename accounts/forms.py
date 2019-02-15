@@ -34,6 +34,8 @@ class SignUpForm(UserCreationForm):
         user.email = self.cleaned_data['email']
         user.address = self.cleaned_data['address']
 
+        # account.objects.create()
+
         if commit:
             user.save()
         return user
