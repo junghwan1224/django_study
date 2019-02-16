@@ -28,7 +28,14 @@
 {% if posts %}
   <ul>
     {% for post in posts %}
-      <li><a href="{% url 'category:post_detail' post.pk %}">({{ post.get_post_type_display }}) {{ post.title }}</a></li>
+      <div style='display: inline-block; margin-right: 10px; margin-left: 10px;'>
+        <div style='margin-bottom:20px;'>
+          <a href="{% url 'category:post_detail' post.pk %}">
+            <div><img src='{{ post.thumbnail.url }}' style='width: 150px; height: 100px;'/></div>
+           <div>({{ post.get_post_type_display }}) {{ post.title }}</div>
+         </a>
+       </div>
+      </div>
     {% endfor %}
   </ul>
 

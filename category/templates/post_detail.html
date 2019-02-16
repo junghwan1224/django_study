@@ -18,6 +18,12 @@
 <div id='dateDiv'>date: {{ post.created_at|date:'Y.n.d  a h:i' }}</div>
 <hr/>
 
+<div id='thumbnailDiv'>
+  <img src='{{ post.thumbnail.url }}' style='width: 300px; height: 200px;'/>
+</div>
+
+<hr/>
+
 <div id='contentDiv'>
 </div>
 

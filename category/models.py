@@ -70,6 +70,10 @@ class Post(models.Model):
         )
     author = models.ForeignKey(Account, on_delete=models.CASCADE)
     title = models.CharField(max_length=30)
+    thumbnail = models.ImageField(
+            upload_to='thumbnail/%Y/%m/%d',
+            default='static/img/default.jpg',
+        )
     price = models.PositiveIntegerField()
     content = models.TextField()
     apply_user = models.ManyToManyField(

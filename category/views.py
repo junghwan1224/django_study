@@ -30,7 +30,8 @@ class AllList(ListView):
 
     def get_queryset(self):
         theme_pk = self.kwargs['theme_pk']
-        return Post.objects.filter(sub_theme__pk=theme_pk)
+        post = Post.objects.filter(sub_theme__pk=theme_pk)
+        return post
 
 
 class BuyList(ListView):
@@ -83,11 +84,13 @@ def post_detail(request, pk):
 @login_required
 def post_create(request, pk):
     if request.method == 'POST':
-        form = PostForm(request.POST)
+        form = PostForm(request.POST, request.FILES)
         if form.is_valid():
             account = Account.objects.get(user_id=request.user.pk)
             saveForm = form.save(commit=False)
             saveForm.author = account
+            if request.FILES:
+                saveForm.thumbnail = request.FILES['thumbnail']
             saveForm.save()
             return redirect(reverse(
                     'category:all_list',
@@ -117,3 +120,12 @@ def apply_post(request, pk):
                     'category:post_detail',
                     kwargs={'pk': pk}
                 ))
+
+
+"""
+신청했으면 거래신청 버튼 없애고 취소하던가 아니면 버튼 클릭 시 이미 신청 했다고 표시하던가
+프로필 페이지
+신청 내역
+신청한 사람과 매치
+거래완료
+"""
