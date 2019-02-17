@@ -1,5 +1,9 @@
 {% extends 'blog/base.html' %}
 {% block content %}
+
+    <div>
+        <a href="{% url 'accounts:profileView' %}"><button class='btn btn-default'>profile</button></a>
+    </div>
     {{ mainTheme }}
     <div>
         <ul>

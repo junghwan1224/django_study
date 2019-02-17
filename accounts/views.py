@@ -1,11 +1,13 @@
 from django.shortcuts import render
 from django.shortcuts import redirect
+from django.shortcuts import get_object_or_404
 from allauth.socialaccount.models import SocialApp
 from allauth.socialaccount.templatetags.socialaccount import get_providers
 from django.conf import settings
 from django.contrib.auth import login, logout, authenticate
 from django.http import Http404
 from django.contrib.auth.hashers import make_password
+from django.contrib.auth.decorators import login_required
 
 from .models import Account
 from .forms import AccountForm
@@ -13,6 +15,8 @@ from .forms import UserForm
 from .forms import LoginForm
 from .forms import SignUpForm
 from .forms import SignInForm
+
+from category.models import Post
 # Create your views here.
 
 
@@ -89,3 +93,13 @@ def loginView(request):
 def logoutView(request):
     logout(request)
     return redirect('accounts:loginView')
+
+
+@login_required
+def profileView(request):
+    post = Post.objects.filter(author__user=request.user)
+
+    ctx = {
+        'posts': post,
+    }
+    return render(request, 'account/profile_template.html', ctx)
