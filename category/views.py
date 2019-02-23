@@ -157,8 +157,3 @@ def check_apply(request, pk):
         'post': post,
     }
     return render(request, 'check_apply.html', ctx)
-
-"""
-신청했으면 거래신청 버튼 없애고 취소하던가 아니면 버튼 클릭 시 이미 신청 했다고 표시하던가
-거래완료
-"""
