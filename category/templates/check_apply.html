@@ -1,0 +1,17 @@
+{% extends 'blog/base.html' %}
+
+{% block content %}
+
+<div>
+  ({{ post.get_post_status_display }}) - {{ post.title }}
+</div>
+
+<div>
+  글쓴이와 연락하기
+  <ul>
+    <li>email: {{ post.author.email }}</li>
+    <li>phone number: {{ post.author.phone }}</li>
+  </ul>
+</div>
+
+{% endblock %}

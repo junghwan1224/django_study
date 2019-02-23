@@ -28,7 +28,12 @@
             {% if post.apply_user.count %}
               {% for applier in post.apply_user.all %}
                 <ul>
-                  <li>{{ applier.username }}</li>
+                  <li>
+                    {{ applier.username }}
+                    <button>
+                      <a href="{% url 'category:apply_send_mail' post.pk applier.pk %}">거래하기</a>
+                    </button>
+                  </li>
                 </ul>
               {% endfor %}
 
@@ -45,6 +50,13 @@
 
 <div>
   내가 거래 신청한 글
+  <ul>
+    {% for post in user.applied_post.all %}
+        <li>
+          <a href="#">({{ post.get_post_status_display }}) - {{ post.title }}</a>
+        </li>
+    {% endfor %}
+  </ul>
 </div>
 
 {% endblock %}

@@ -37,7 +37,7 @@ class SubTheme(models.Model):
         return self.title
 
 
-# 거래상태 필드는 아직, 남녀 카테고리(gender), 섬네일 이미지
+# 남녀 카테고리(gender)
 class Post(models.Model):
 
     POST_TYPE = (
@@ -101,8 +101,6 @@ class Comment(models.Model):
             on_delete=models.CASCADE,
             related_name='related_comment'
         )
-
-# 판매중, 구매중, 거래중 로직 어떤식으로 짤지 구체적으로 정해야 할 것 같습니다...!
 
 
 # class SellPost(Post):

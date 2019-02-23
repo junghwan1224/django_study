@@ -1,6 +1,9 @@
 from django.shortcuts import render, reverse, redirect
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import login_required
+from django.core.mail import send_mail
+from django.contrib.auth.models import User
+from django.conf import settings
 
 from django.views.generic.list import ListView
 
@@ -80,7 +83,6 @@ def post_detail(request, pk):
     return render(request, 'post_detail.html', ctx)
 
 
-# 여기에도 pk 파라미터를 줘야 하는가?
 @login_required
 def post_create(request, pk):
     if request.method == 'POST':
@@ -122,8 +124,41 @@ def apply_post(request, pk):
                 ))
 
 
+@login_required
+def apply_send_mail(request, post_pk, user_pk):
+    # post = get_object_or_404(Post, pk=post_pk)
+    user = get_object_or_404(User, pk=user_pk)
+    url = '{0}{1}'.format(
+            'http://localhost:8000',
+            reverse(
+                    'category:check_apply',
+                    kwargs={"pk": post_pk},
+                )
+        )
+    html = '<a href="{0}">거래하기</a>'.format(url)
+    send_mail(
+            '거래 매치 메일',
+            '',
+            settings.EMAIL_HOST_USER,
+            [user.email],
+            html_message=html
+        )
+
+    return redirect(reverse(
+            'accounts:profileView'
+        ))
+
+
+@login_required
+def check_apply(request, pk):
+    post = get_object_or_404(Post, pk=pk)
+
+    ctx = {
+        'post': post,
+    }
+    return render(request, 'check_apply.html', ctx)
+
 """
 신청했으면 거래신청 버튼 없애고 취소하던가 아니면 버튼 클릭 시 이미 신청 했다고 표시하던가
-신청한 사람과 매치
 거래완료
 """
